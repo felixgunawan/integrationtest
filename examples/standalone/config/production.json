@@ -1,0 +1,9 @@
+{
+    "db": {
+        "host" : "dbPROD",
+        "port" : "5432",
+        "user" : "user_example",
+        "pass" : "pass_example",
+        "name" : "db_example"
+    }
+}
