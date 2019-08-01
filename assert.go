@@ -1,6 +1,7 @@
 package integrationtest
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -8,8 +9,10 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+)
 
-	"github.com/tokopedia/orderapp/acceptancetest/acceptance/config"
+const (
+	MaxDBRetry = 10
 )
 
 //TestCase holds test case object
@@ -45,14 +48,17 @@ func CreateTestCases(name string, path string, dbCfg *DBConfig) []*TestCase {
 			Name:     name,
 			Path:     path,
 			FileName: reqFile.Name(),
+			DBConfig: dbCfg,
 		})
 	}
 	return testCases
 }
 
 //ParsePostReq for testcase
-func (t *TestCase) ParsePostReq() interface{} {
-	return parseJSONPost(t.Path + "req/" + t.FileName)
+func (t *TestCase) ParsePostReq() *bytes.Buffer {
+	reqJSON := parseJSONPost(t.Path + "req/" + t.FileName)
+	bytesRepresentation, _ := json.Marshal(reqJSON)
+	return bytes.NewBuffer(bytesRepresentation)
 }
 
 //ParseGetReq for testcase
@@ -89,7 +95,7 @@ func (t *TestCase) AssertDB() {
 	pass := false
 	tableFail := ""
 	var err error
-	for n := 0; n <= config.MaxDBRetry; n++ {
+	for n := 0; n <= MaxDBRetry; n++ {
 		pass, tableFail, err = assertDB(t.Path+"db/"+t.FileName, t.DBConfig)
 		if err != nil {
 			log.Fatalln(err)

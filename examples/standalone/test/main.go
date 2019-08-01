@@ -12,6 +12,7 @@ func main() {
 	var msgFail []string
 	listTestCase := []func() (int, int, []string){
 		testcase.Index,
+		testcase.Insert,
 	}
 
 	for _, tc := range listTestCase {

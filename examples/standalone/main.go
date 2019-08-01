@@ -26,7 +26,11 @@ type ExampleInsert struct {
 }
 
 func main() {
-
+	var err error
+	db, err = connectDb()
+	if err != nil {
+		log.Fatal(err)
+	}
 	r := mux.NewRouter()
 	r.HandleFunc("/", index).Methods("GET")
 	r.HandleFunc("/add", insertExample).Methods("POST")
@@ -51,14 +55,14 @@ func index(w http.ResponseWriter, r *http.Request) {
 func insertExample(w http.ResponseWriter, r *http.Request) {
 	var insertParam ExampleInsert
 	err := json.NewDecoder(r.Body).Decode(&insertParam)
-	if err == nil {
+	if err != nil {
 		json.NewEncoder(w).Encode(Message{
 			Msg: err.Error(),
 		})
 		return
 	}
 	_, err = db.Exec(`INSERT INTO example (name) VALUES ($1)`, insertParam.Name)
-	if err == nil {
+	if err != nil {
 		json.NewEncoder(w).Encode(Message{
 			Msg: err.Error(),
 		})

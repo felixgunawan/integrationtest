@@ -1,6 +1,6 @@
 {
     "db": {
-        "host" : "db",
+        "host" : "localhost",
         "port" : "5432",
         "user" : "user_example",
         "pass" : "pass_example",

@@ -1,0 +1,12 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: user_example
+      POSTGRES_PASSWORD: pass_example
+      POSTGRES_DB: db_example
+    volumes:
+      - ./migration:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432

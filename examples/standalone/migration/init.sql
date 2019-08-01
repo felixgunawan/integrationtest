@@ -1,4 +1,0 @@
-CREATE TABLE example (
-    id BIGSERIAL PRIMARY KEY, 
-    name VARCHAR(128) NOT NULL
-);

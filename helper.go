@@ -9,7 +9,10 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" //using postgres
-	"github.com/tokopedia/orderapp/acceptancetest/acceptance/config"
+)
+
+const (
+	NoRowFlag = "NO_ROW"
 )
 
 func parseJSONPost(filePathAndName string) map[string]interface{} {
@@ -81,7 +84,7 @@ func assertDB(filePath string, dbCfg *DBConfig) (bool, string, error) {
 	}
 
 	for tableName, table := range assertTable {
-		noRow := IsInArrayString(table.Flags, config.NoRowFlag)
+		noRow := IsInArrayString(table.Flags, NoRowFlag)
 		for _, column := range table.Columns {
 			query := generateQuery(tableName, column)
 			var count int
